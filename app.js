@@ -120,6 +120,8 @@ $('#mute').on("click", () => {
     }
 })
 
+// Animation 
+
 $(".player-1").on(
     "animated MSAnimationEnd webkitAnimationEnd oAnimationEnd",
     function() {
@@ -133,6 +135,8 @@ $(".player-2").on(
         $(this).removeClass("animate-color");
     }
 );
+
+// Play Again button
 
 $('#play-again').on("click", () => {
     location.reload();

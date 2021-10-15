@@ -42,6 +42,7 @@ const chooseAnswer = (event, question) => {
 }
 ```
 
+Here's the chooseAnswer function. This accepts the click event and the current question. It will check the player's selction with the correct answer. If these match, the player will gain a point. If not, the next player is chosen and it goes on to the checkWinner function. 
 
 ```js
 const setBoard = (q) => {
@@ -54,10 +55,13 @@ const setBoard = (q) => {
     c.text(randomQuestion.c)
     d.text(randomQuestion.d)
     
+    // Event Listeners
     $("li").off()
     $("li").on("click", (event) => {
         chooseAnswer(event, randomQuestion)
     })
+
+    // Current Player
     if(state.which === true) {
         $('#current-player').text("Player 001's turn")
     } else {
@@ -68,7 +72,9 @@ const setBoard = (q) => {
 }
 ```
 
-```
+Here is where the board is set. A random question out of the question data array is selection. The options are filled, and an event listener is placed on the buttons. The scoreboard is also filled, and we can see who's turn it is and each player's score. 
+
+```js
 const checkWinner = () => {
     if(state.player1 === 10) {
         $('.container').hide();
@@ -91,3 +97,9 @@ const checkWinner = () => {
     }
 }
 ```
+
+The last function is checking the winner of the game. If a player reaches 10 points, the winner page is showed and the board is reset. If there's no winner, a new question appears and the game continues.
+
+## Deployment URL
+
+https://seir-penguin-project-1-mattwclosson.vercel.app/
