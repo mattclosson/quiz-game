@@ -2,7 +2,6 @@
 let state = {
     player1: localStorage.player1 || 0,
     player2: localStorage.player2 || 0,
-    currentQuestion: {},
     which: localStorage.which || true
 }
 
@@ -20,8 +19,6 @@ if(localStorage.state) {
     $('.container').show()
     $('.continue-game').hide()
 }
-
-let questions = []
 
 // DOM ELEMENTS
 const question = $('#question')
@@ -42,12 +39,17 @@ const chooseAnswer = (event, question) => {
         }
         setBoard(questions)
     } else {
+        if(state.which) {
+            $('.player-1').addClass('animate-color')
+        } else {
+            $('.player-2').addClass('animate-color')
+        }
         state.which = !state.which
         localStorage.setItem('which', state.which)
-        setBoard(questions)
     }
     localStorage.setItem('state', JSON.stringify(state))
     state = JSON.parse(localStorage.getItem('state'))
+    checkWinner()
 }
 
 const setBoard = (q) => {
@@ -73,11 +75,65 @@ const setBoard = (q) => {
     $('#player-2-score').text(state.player2)
 }
 
-// Logic
+const checkWinner = () => {
+    if(state.player1 === 10) {
+        $('.container').hide();
+        $('.winner').show();
+        $('#winning-player').text('Player 1 is the winner');
+        state.player1 = 0;
+        state.player2 = 0;
+        state.which = true;
+        localStorage.clear();
+    } else if(state.player2 === 10) {
+        $('.container').hide()
+        $('.winner').show()
+        $('#winning').text('Player 2 is the winner')
+        state.player1 = 0;
+        state.player2 = 0;
+        state.which = true;
+        localStorage.clear();
+    } else {
+        setBoard(questions)
+    }
+}
+
+// API
 const url = "https://cdn.contentful.com/spaces/sii2g4c5fqq1/environments/master/entries?access_token=493oaWG0DstmT9tL_7obbiDy1CXARJPyZAv7rpjE-DM"
 
 $.ajax(url).then((data) => {
     questions = data.items.map((q) => q.fields)
 
     setBoard(questions)
+})
+
+// Music
+
+aud = document.getElementById("myAudio");
+aud.volume = 0.5
+$('#mute').on("click", () => {
+    if(aud.volume === 0.5) {
+        aud.volume = 0
+        $('#mute').text('Unmute')
+    } else {
+        aud.volume = 0.5
+        $('#mute').text('Mute')
+    }
+})
+
+$(".player-1").on(
+    "animated MSAnimationEnd webkitAnimationEnd oAnimationEnd",
+    function() {
+        $(this).removeClass("animate-color");
+    }
+);
+
+$(".player-2").on(
+    "animated MSAnimationEnd webkitAnimationEnd oAnimationEnd",
+    function() {
+        $(this).removeClass("animate-color");
+    }
+);
+
+$('#play-again').on("click", () => {
+    location.reload();
 })
